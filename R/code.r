@@ -1,3 +1,7 @@
+# autor: Joao Victor Antunes Lopes
+# R version 4.2.2 (2022-10-31 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+
 # carregando pacotes
 library(data.table)
 library(dplyr)
@@ -33,7 +37,6 @@ names(df2010AM)
 # conferindo a distribuicao etaria
 hist(df1991AM$AGE) 
 hist(df2010AM$AGE)
-
 
 # criando df para piramide etaria
 # 1991 
@@ -136,7 +139,7 @@ idade = c("0-4", "5-9", "10-14",
 q1_2010$Homem.p = q1_2010$Homem/sum(q1_2010);
 q1_2010$Mulher.p = q1_2010$Mulher/sum(q1_2010)
 
-# plotnado a piramide
+# plotando a piramide
 windows(height = 10, width = 15)
 
 pyramid.plot(q1_2010$Homem.p*100, q1_2010$Mulher.p*100, labels = idade, unit = '%',
@@ -183,11 +186,11 @@ View(q2_2010)
 # questao 3
 # 1991 
 
-names(df1991AM) #SCHOOL - variavel refente a frequencia escolar
+names(df1991AM) #SCHOOL - variavel referente a frequencia escolar
 
 q3_1991 <- df1991AM %>% 
   select(SCHOOL, AGE) %>% # selecionando school and age
-  filter(SCHOOL %in% c(1,2), AGE %in% 6:18) %>% # desconsidernado NIU
+  filter(SCHOOL %in% c(1,2), AGE %in% 6:18) %>% # desconsiderando NIU
   mutate(Yes = SCHOOL == 1, No = SCHOOL == 2) %>% # 1, sim e 2, nao
   mutate(AGE = case_when(AGE %in% 6:15 ~ '6 a 15 anos', 
                          AGE %in% 16:18 ~ '16 a 18 anos')) %>% #agrupamento 6 a 15 e 16 a 18
@@ -273,7 +276,7 @@ q4_1991_cond_habitacao <- df1991AM %>% # cond habitacao
   na.omit() %>% # omitindo NAS
   group_by(cond_habitacao, faixa_renda) %>% # agrupando
   count() %>%
-  pivot_wider( # povoteando
+  pivot_wider( # pivoteando
     names_from = cond_habitacao, 
     values_from = n
   )
@@ -306,7 +309,7 @@ q4_2010_nivel_escolar <- df2010AM %>%
   na.omit() %>% # omittindo NAS
   group_by(nivel_escolar, faixa_renda) %>% 
   count() %>% 
-  pivot_wider( # pivotenado
+  pivot_wider( # pivoteando
     names_from = nivel_escolar, 
     values_from = n
   )
@@ -343,18 +346,18 @@ View(q4_2010_cond_habitacao)
 q5_1991AM <- df1991AM %>%
   mutate(
         PIA = case_when(
-          AGE >= 15 & AGE <= 64 ~ 'sim', # sim quem esta entre 15 a 64 (PIA)
+          AGE >= 15 & AGE <= 64 ~ 'sim', # sim, quem esta entre 15 a 64 (PIA)
           TRUE ~ 'nao'
         ),
         PEA = case_when(
-          (LABFORCE == 2) & (AGE >= 15 & AGE <= 64) ~ 'sim', # sim quem possui LABFORCE = 2 e esta entre 15 A 64 (PEA)
+          (LABFORCE == 2) & (AGE >= 15 & AGE <= 64) ~ 'sim', # sim, quem possui LABFORCE = 2 e esta entre 15 A 64 (PEA)
           TRUE ~ 'nao'
   )
         ) %>% 
   filter(PIA == 'sim') %>% # filtrando pela pia
   group_by(PIA, PEA) %>% # agrupando
   count() %>%
-  pivot_wider(names_from = PEA, values_from = n) %>% # pivotenado
+  pivot_wider(names_from = PEA, values_from = n) %>% # pivoteando
   mutate(pct_PEA = sim/(sim + nao)*100) # pct pea
 
 #
